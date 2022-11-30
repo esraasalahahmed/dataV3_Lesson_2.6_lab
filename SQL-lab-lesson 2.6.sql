@@ -1,3 +1,5 @@
+USE sakila;
+
 -- 1. In the table actor, which are the actors whose last names are not repeated? 
 -- For example if you would sort the data in the table actor by last_name, 
 -- you would see that there is Christian Arkoyd, Kirsten Arkoyd, and Debbie Arkoyd. 
@@ -58,9 +60,13 @@ HAVING AVG(length) > 120;
 -- 8. Rank films by length (filter out the rows that have nulls or 0s in length column).
 -- In your output, only select the columns title, length, and the rank.
 SELECT * FROM film;
-SELECT title, length, 
-RANK () OVER (
-ORDER BY length DESC
-) AS the_rank 
+
+SELECT title, length,
+CASE
+WHEN length BETWEEN 1 AND 60 THEN 'Short'
+WHEN length BETWEEN 61 AND 120 THEN 'Medium'
+ELSE 'Long'
+END AS length_rating
 FROM film
-WHERE length !=0 AND length IS NOT NULL;
+WHERE length IS NOT NULL
+ORDER BY length;
